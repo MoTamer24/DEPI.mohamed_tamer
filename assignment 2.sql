@@ -104,6 +104,3 @@ group by concat(customer.first_name,' ',customer.last_name);
 select concat(staff.first_name,staff.last_name)as staff , concat(manager.first_name,manager.last_name)as managers 
 from sales.staffs as staff 
 join sales.staffs as manager on manager.staff_id=staff.manager_id;
-
-
-select * from sales.orders;
