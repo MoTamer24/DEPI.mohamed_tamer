@@ -18,7 +18,7 @@ from sales.orders as orders
 join sales.customers as customers on customers.customer_id=orders.customer_id
 join sales.stores as stores on stores.store_id=orders.store_id;
 --4
-select store_name , sum(list_price) sales
+select store_name , sum(list_price*quantity) sales
 from sales.orders      as orders
 join sales.stores      as stores on stores.store_id=orders.store_id 
 join sales.order_items as item   on item.order_id=orders.order_id
