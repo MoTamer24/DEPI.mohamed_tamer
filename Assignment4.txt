@@ -1,0 +1,100 @@
+-- user management 
+-- add a new user 
+create procedure addUser
+(@username varchar(255),@email varchar(255),@pass varchar(255),@status varchar(255),
+@ad1 varchar(255),@ad2 varchar(255),@city varchar(255),@state varchar(255),@code varchar(255),@cid int ,@date date) as
+begin 
+insert into users 
+(username,email,passwordhash,status,addressline1,addressline2,city,[State],postalcode,countryid,createdat)
+values ( @username ,@email ,@pass ,@status ,
+@ad1 ,@ad2 ,@city ,@state ,@code ,@cid,@date);
+end ;
+
+exec adduser  @username='mohamed',@email='email',@pass='pass',@status='active',@ad1='lon',@ad2='don',
+@city='london',@state='lan',@code='222',@cid=2,@date='2/2/2022';
+
+alter table users 
+add  constraint checkstatue check ([status] in ('active','unactive','terminated')); 
+
+select * from users;
+-------------------------------------------------------------------------------------
+--update user data 
+create procedure updateUser (@id int , @status varchar(25))
+as 
+begin
+update users set [status] =@status where userid=@id
+end;
+
+exec updateuser @id =1,@status ='unactive';
+
+select * from users ;
+
+--------------------------------------------------------------
+--item managemnt 
+create procedure additem 
+(
+@sellerid      int,
+@catid         int,
+@title         varchar(255) ,
+@desc          varchar(255),
+@startingprice decimal(10,2),
+@currentprice  decimal(10,2),
+@startdate     date,
+@enddate       date,
+@imageurl      varchar(255),
+@createdat     date)
+as
+begin
+insert into items 
+(
+sellerid,categoryid,title,[description],startingprice,currentprice,startdate,enddate,imageurl,createdat 
+)
+values(
+@sellerid     ,
+@catid        ,
+@title        ,
+@desc         ,
+@startingprice,
+@currentprice ,
+@startdate    ,
+@enddate      ,
+@imageurl     ,
+@createdat   ) 
+end;
+
+exec additem 
+@sellerid = 1,
+@catid       =2 , 
+@title        ='test' ,
+@desc         = 'test of test',
+@startingprice= 100.00,
+@currentprice = 150.0,
+@startdate    = '2/2/2022',
+@enddate      = '3/3/2023',
+@imageurl     = 'imageurl',
+@createdat    = '1/1/2011';
+
+select * from items;
+-----------------------------------------------------
+-- insert bid and update current price
+create procedure insertbid (
+@itemid int,
+@userid int,
+@bidamount decimal(10,2))
+as begin 
+insert into bids (itemid,userid,bidamount,bidtime)
+values(
+@itemid,
+@userid,
+@bidamount,
+getdate());
+update items set currentprice =(startingprice-@bidamount);
+end ;
+
+exec insertbid 
+@itemid=1,
+@userid=1,
+@bidamount=20;
+
+selecT * from bids;
+select * from items;
