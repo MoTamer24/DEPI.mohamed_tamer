@@ -1,0 +1,3 @@
+{
+  "connectionStr": "Server=.;Database=UsersDB;Integrated Security=SSPI;TrustServerCertificate=True"
+}
